@@ -3,33 +3,55 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-    return (
-      <button className={"square" + (props.hasWon ? " square--winning" : "")} onClick={props.onClick}>
-        {props.value}
-      </button>
-    );
+  return (
+    <button className={"square" + (props.hasWon ? " square--winning" : "")} onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
 }
-  
-class Board extends React.Component {
-  renderSquare(i) {
-    return (
-      <Square
-        hasWon={this.props.winningSquares.includes(i)}
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
-      />
-    );
+
+function renderSquare(i,props) {
+  return (
+    <Square
+      hasWon={props.winningSquares.includes(i)}
+      value={props.squares[i]}
+      onClick={() => props.onClick(i)}
+    />
+  );
+}
+
+function Board(props) {
+  const outputBoard = Array(9).fill(null);
+
+  for(let i = 0; i < 9; i+=3) {
+    outputBoard.push(<div className="board-row">
+    {renderSquare(i,props)}{renderSquare(i+1,props)}{renderSquare(i+2,props)}
+    </div>);
   }
 
-  render() {
-    const arr = Array(9).fill(null).map((elem,move) => this.renderSquare(move));
-    let newArr = [];
-    for (let i = 0; i < 9; i+=3) {
-        newArr.push(<div className="board-row">{arr[i]}{arr[i+1]}{arr[i+2]}</div>);
-    }
-    return (<div>{newArr}</div>);
-  }
+  return <div>{outputBoard}</div>;
 }
+
+// class Board extends React.Component {
+//   renderSquare(i) {
+//     return (
+//       <Square
+//         hasWon={this.props.winningSquares.includes(i)}
+//         value={this.props.squares[i]}
+//         onClick={() => this.props.onClick(i)}
+//       />
+//     );
+//   }
+
+//   render() {
+//     const arr = Array(9).fill(null).map((elem,move) => this.renderSquare(move));
+//     let newArr = [];
+//     for (let i = 0; i < 9; i+=3) {
+//         newArr.push(<div className="board-row">{arr[i]}{arr[i+1]}{arr[i+2]}</div>);
+//     }
+//     return (<div>{newArr}</div>);
+//   }
+// }
   
 class Game extends React.Component {
   constructor(props) {
